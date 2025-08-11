@@ -1,39 +1,18 @@
 
 <script setup lang="ts">
-import { ref } from 'vue'
-interface BlogPost {
-    created_time?: number,
-    modified_time?: number,
-    title?: string,
-    views?: number,
-    author?: string,
-    content?: string,
-    published?: number,
-    cover_url?: string,
-    id: number,
-}
+import { ref, reactive, onMounted } from 'vue'
+import type { Ref, Reactive } from 'vue'
+import type { BlogPost } from './BlogPost.ts'
+import { timeStampToString, postIdToUrl } from './BlogPost.ts'
+import { RouterLink, RouterView } from 'vue-router'
 
-function timeStampToString(UNIX_timestamp: number, include_hour: boolean): string {
-    let a = new Date(UNIX_timestamp * 1000);
-    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    let year = a.getFullYear();
-    let month = months[a.getMonth()];
-    let date = a.getDate();
-    let time = date + ' ' + month + ' ' + year;
-    if (include_hour) {
-	let hour = a.getHours();
-	let min = a.getMinutes();
-	let sec = a.getSeconds();
-	time += ' ' + hour + ':' + min + ':' + sec ;
-    }
-    return time;
-}
-
-let blog_posts = ref([
-    { title: "Title 1", created_time: 1715678827 }, 
-    { title: "Title: 2", created_time: 1714866029 },
-]);
-
+let blog_posts: Ref<BlogPost[]> = ref([]);
+onMounted(() => {
+    console.log("here");
+    fetch('/post')
+    .then(res => res.json())
+    .then(data => blog_posts.value = data)
+});
 </script>
 
 <template>
@@ -44,14 +23,14 @@ let blog_posts = ref([
 		<!-- Post 1 -->
 		<article v-for="post in blog_posts" class="post-card">
 		    <div class="mb-3 flex items-center">
-			<span class="text-sm text-gray-500">{{ timeStampToString(post.created_time, false) }}</span>
+			<span class="text-sm text-gray-500">{{ timeStampToString(post.created_time!, false) }}</span>
 			<span class="mx-2 text-gray-400">•</span>
 			<span class="text-sm text-gray-500">8 min read</span>
 		    </div>
 		    <h3 class="text-2xl font-bold mb-3">
-			<a href="#" class="hover:text-indie-blue">{{ post.title }}</a>
+			<RounterLink :to="postIdToUrl(post.id)" class="hover:text-indie-blue">{{ post.title }}</RounterLink>
 		    </h3>
-		    <p class="text-gray-700 mb-4">Navigating the ever-changing landscape of JavaScript frameworks and tools.</p>
+		    <p class="text-gray-700 mb-4">{{ post.content }}</p>
 		</article>
 	    </div>
 	</section>
