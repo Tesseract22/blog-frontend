@@ -3,7 +3,7 @@ import type { BlogPost } from './BlogPost.ts'
 import { timeStampToString, postIdToUrl } from './BlogPost.ts'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
-import { marked } from 'marked'
+// import { marked } from 'marked'
 
 const props = defineProps({
     id: {
