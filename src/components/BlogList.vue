@@ -28,7 +28,7 @@ onMounted(() => {
 			<span class="text-sm text-gray-500">8 min read</span>
 		    </div>
 		    <h3 class="text-2xl font-bold mb-3">
-			<RounterLink :to="postIdToUrl(post.id)" class="hover:text-indie-blue">{{ post.title }}</RounterLink>
+			<RouterLink :to="postIdToUrl(post.id)" class="hover:text-indie-blue">{{ post.title }}</RouterLink>
 		    </h3>
 		    <p class="text-gray-700 mb-4">{{ post.content }}</p>
 		</article>
